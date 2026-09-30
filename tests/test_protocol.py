@@ -1,3 +1,5 @@
+import pytest
+
 from ruthless_alpha.protocol import analyze, trailing_return
 
 
@@ -6,7 +8,7 @@ def bars(values):
 
 
 def test_trailing_return_uses_available_history():
-    assert trailing_return(bars([100, 110]), 252) == 0.1
+    assert trailing_return(bars([100, 110]), 252) == pytest.approx(0.1)
 
 
 def test_analysis_is_deterministic_and_secret_free():

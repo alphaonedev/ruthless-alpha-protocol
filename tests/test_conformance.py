@@ -311,7 +311,7 @@ def test_cohort_summary_reports_selection():
 def test_schema_file_matches_dataclass():
     import dataclasses
     import pathlib
-    schema = json.loads((pathlib.Path(__file__).parent / "luck-report.schema.json").read_text())
+    schema = json.loads((pathlib.Path(__file__).parent.parent / "src" / "ruthless_alpha" / "luck-report.schema.json").read_text())
     fields = {f.name for f in dataclasses.fields(rl.LuckReport)}
     assert set(schema["required"]) == fields
     assert set(schema["properties"]) == fields | {"luck", "$schema"}

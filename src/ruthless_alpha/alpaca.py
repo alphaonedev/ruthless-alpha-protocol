@@ -23,16 +23,24 @@ def daily_bars(symbols: list[str], years: int = 3) -> dict[str, list[dict]]:
     key, secret, base = _credentials()
     end = date.today()
     start = end - timedelta(days=366 * years + 10)
-    query = urllib.parse.urlencode({
+    params = {
         "symbols": ",".join(symbols), "timeframe": "1Day",
         "start": start.isoformat(), "end": end.isoformat(),
         "adjustment": "all", "feed": "iex", "limit": 10000,
-    })
-    request = urllib.request.Request(
-        f"{base}/v2/stocks/bars?{query}",
-        headers={"APCA-API-KEY-ID": key, "APCA-API-SECRET-KEY": secret},
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        payload = json.load(response)
-    return payload.get("bars", {})
+    }
+    bars: dict[str, list[dict]] = {}
+    # The limit caps total bars across all symbols, so follow page tokens.
+    while True:
+        request = urllib.request.Request(
+            f"{base}/v2/stocks/bars?{urllib.parse.urlencode(params)}",
+            headers={"APCA-API-KEY-ID": key, "APCA-API-SECRET-KEY": secret},
+        )
+        with urllib.request.urlopen(request, timeout=30) as response:
+            payload = json.load(response)
+        for symbol, rows in (payload.get("bars") or {}).items():
+            bars.setdefault(symbol, []).extend(rows)
+        token = payload.get("next_page_token")
+        if not token:
+            return bars
+        params["page_token"] = token
 
