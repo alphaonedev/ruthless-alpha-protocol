@@ -1,0 +1,6 @@
+[
+  {"symbol": "MPLX", "cash_yield": 0.076, "kill_probability": 0.10},
+  {"symbol": "WES", "cash_yield": 0.083, "kill_probability": 0.12},
+  {"symbol": "USAC", "cash_yield": 0.084, "kill_probability": 0.15}
+]
+

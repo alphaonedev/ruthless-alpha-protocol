@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ruthless-luck.spec/v1.6/luck-report.schema.json",
+  "title": "LuckReport",
+  "description": "The four numbers of the Ruthless Luck Algorithm (spec v1.6, section 2 step 8) for one agent and one scoring window. Luck is derived as outcome - price; if present it must equal that difference. Cross-field rules that JSON Schema cannot express (horizon > t; an absorbed path is scored at ruin_value; numbers must be finite; ruin_mass 0 with an absorbed path, or 1 with a surviving path, falsifies the model) are enforced by LuckReport.from_dict in the reference implementation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_id",
+    "t",
+    "horizon",
+    "price",
+    "outcome",
+    "ruin_mass",
+    "survived",
+    "ruin_value",
+    "model_id"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://ruthless-luck.spec/v1.6/luck-report.schema.json"
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the scored agent.",
+      "maxLength": 256
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of the model that produced the price. Luck against an unnamed model cannot be audited.",
+      "maxLength": 256
+    },
+    "t": {
+      "type": "number",
+      "description": "Time at which the price was set."
+    },
+    "horizon": {
+      "type": "number",
+      "description": "Scoring time T; must exceed t."
+    },
+    "price": {
+      "type": "number",
+      "description": "E_{i,t}[Y_T], absorbed paths included at ruin_value."
+    },
+    "outcome": {
+      "type": "number",
+      "description": "Realized Y_T; equals ruin_value if the path was absorbed."
+    },
+    "ruin_mass": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "mu_{i,t}(tau_R <= T)."
+    },
+    "survived": {
+      "type": "boolean",
+      "description": "Indicator of survival to T."
+    },
+    "ruin_value": {
+      "type": "number",
+      "description": "y_R, the yield assigned to absorbed paths."
+    },
+    "luck": {
+      "type": "number",
+      "description": "Optional; must equal outcome - price exactly (IEEE-754 double subtraction)."
+    }
+  }
+}

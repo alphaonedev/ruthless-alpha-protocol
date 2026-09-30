@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ruthless-alpha-protocol"
+version = "0.1.0"
+description = "A reproducible, ruin-aware stock analysis protocol using Alpaca market data."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "alphaonedev"}]
+classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License"]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+ruthless-alpha = "ruthless_alpha.cli:main"
+
+[tool.setuptools.package-data]
+ruthless_alpha = ["luck-report.schema.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
